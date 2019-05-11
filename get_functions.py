@@ -8,10 +8,10 @@ def history_point_data(path):
             Keys : International ID of each typhoon, 'i' in essay
             Value: list consists of tuple(latitude, longitude) of each point('j' in essay)
     '''
-    ### Part 1. get historical typhoon data
+    ## Part 1. get historical typhoon data
     history = data_process(path)
 
-    ### Part 2. generate P(i, j)
+    ## Part 2. generate P(i, j)
     point_data = {}
 
     for i in history: # for each typhoon, 'i' in essay

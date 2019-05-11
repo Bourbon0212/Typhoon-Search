@@ -1,5 +1,5 @@
 def data_process(path):
-    ## Part 1: Find the length of the data
+    ## Part 1. Find the length of the data
     fh1 = open(path, 'r')
 
     length = 0
@@ -8,7 +8,7 @@ def data_process(path):
 
     fh1.close()
 
-    ## Part 2: return the data in dictionary
+    ## Part 2. return the data in dictionary
 
     fh1 = open(path, 'r')
 
