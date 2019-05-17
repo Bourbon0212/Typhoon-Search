@@ -1,7 +1,6 @@
 from get_functions import history_point_data, getDistance, get_yymm
-from data_process import data_process
 
-def min_distance(path, U):
+def min_distance(history, point_data, U):
     '''
         MIN_DISTANCE
             Type : Dictionary
@@ -17,7 +16,6 @@ def min_distance(path, U):
             }
     '''
     min_distance = {}
-    point_data = history_point_data(path) # get historical typhoon points, P(i,j) in essay
 
     for i in point_data: # i refers to the ith historic typhoon
         distance_ijk = {}
@@ -35,7 +33,7 @@ def min_distance(path, U):
     print('MIN DISTANCE SUCCESS!')
     return min_distance
 
-def weight_of_all(path, U, w):
+def weight_of_all(history, point_data, U, w):
     '''
         WEIGHT_OF_ALL
             Type : List
@@ -49,8 +47,7 @@ def weight_of_all(path, U, w):
             ]
     '''
     temp = {} # key: typhoon name; Value: sigma(1 + k * w)
-    min_dist = min_distance(path, U)
-    point_data = history_point_data(path)
+    min_dist = min_distance(history, point_data, U)
 
     ### Part 1. Route Score
     for i in point_data:
@@ -69,13 +66,13 @@ def weight_of_all(path, U, w):
         temp[i] = score
 
     ### Part 2. Time Score
-    yymm_data = get_yymm(path)
+    yymm_data = get_yymm(history)
     weight_of_all = [ [i, temp[i], yymm_data[i]] for i in temp ]
 
     print('WEIGHT OF ALL SUCCESS!')
     return weight_of_all
 
-def radix_sort(path, U, w = 1, n = 10):
+def radix_sort(history, point_data, U, w = 1, n = 10):
     '''
         RADIX_SORT
             Type : Dictionary
@@ -100,9 +97,7 @@ def radix_sort(path, U, w = 1, n = 10):
             }
     '''
     import datetime
-    weight = weight_of_all(path, U, w)
-    point_data = history_point_data(path)
-    data = data_process(path)
+    weight = weight_of_all(history, point_data, U, w)
 
     ### Part 1. Sort by the year (the closer, the more prior)
     for i in range(len(weight) - 1, 0, -1):
@@ -134,7 +129,7 @@ def radix_sort(path, U, w = 1, n = 10):
     final = {}
     for i in range(n):
         typhoon_id = weight[i][0]
-        name = data[typhoon_id]['header']['name']
+        name = history[typhoon_id]['header']['name']
 
         json_point_data = []
         for j in point_data[typhoon_id]:

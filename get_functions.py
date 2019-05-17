@@ -1,8 +1,9 @@
 from data_process import data_process
 import math
 
-def history_point_data(path):
+def history_point_data(history):
     '''
+        Input: history ( = data_process() )
         POINT_DATA
             Type : Dictionary
             Keys : International ID of each typhoon, 'i' in essay
@@ -12,10 +13,7 @@ def history_point_data(path):
                 "typhoon_international_id" : [ (latitude, longitude), ]
             }
     '''
-    ### Part 1: get historical typhoon data
-    history = data_process(path)
-
-    ### Part 2: generate P(i, j)
+    ### Part 1: generate P(i, j)
     point_data = {}
 
     for i in history: # for each typhoon, 'i' in essay
@@ -35,7 +33,7 @@ def history_point_data(path):
 
 def getDistance(latA, lonA, latB, lonB):
     '''
-        Calculate distance btw two points(latA, lonA, latB, lonB), in meter
+        Calculate distance btw two points(latA, lonA, latB, lonB), in meters
     '''
     ra = 6378140  # radius of equator: meter
     rb = 6356755  # radius of polar: meter
@@ -59,12 +57,10 @@ def getDistance(latA, lonA, latB, lonB):
     distance = ra * (x + dr)
     return distance
 
-def get_yymm(path):
+def get_yymm(history):
     '''
         Find the latest time of each typhoon [int(year), int(month)]
     '''
-    history = data_process(path)
-
     yymm_data = {}
 
     for i in history: # for each typhoon, 'i' in essay

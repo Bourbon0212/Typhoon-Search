@@ -14,4 +14,6 @@ def typhoon_history():
 
 @app.route("/route_sorting")
 def route_sorting():
-    return jsonify(radix_sort(path, U))
+    history = data_process(path) # everything
+    point_data = history_point_data(history) # P(i, j)
+    return jsonify(radix_sort(history, point_data, U))
