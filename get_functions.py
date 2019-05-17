@@ -7,11 +7,15 @@ def history_point_data(path):
             Type : Dictionary
             Keys : International ID of each typhoon, 'i' in essay
             Value: list consists of tuple(latitude, longitude) of each point('j' in essay)
+
+            {
+                "typhoon_international_id" : [ (latitude, longitude), ]
+            }
     '''
-    ## Part 1. get historical typhoon data
+    ### Part 1: get historical typhoon data
     history = data_process(path)
 
-    ## Part 2. generate P(i, j)
+    ### Part 2: generate P(i, j)
     point_data = {}
 
     for i in history: # for each typhoon, 'i' in essay
@@ -46,7 +50,36 @@ def getDistance(latA, lonA, latB, lonB):
     pB = math.atan(rb / ra * math.tan(radLatB))
     x = math.acos(math.sin(pA) * math.sin(pB) + math.cos(pA) * math.cos(pB) * math.cos(radLonA - radLonB))
     c1 = (math.sin(x) - x) * (math.sin(pA) + math.sin(pB))**2 / math.cos(x / 2)**2
-    c2 = (math.sin(x) + x) * (math.sin(pA) - math.sin(pB))**2 / math.sin(x / 2)**2
+    try:
+        c2 = (math.sin(x) + x) * (math.sin(pA) - math.sin(pB))**2 / math.sin(x / 2)**2
+    except:
+        c2 = 0
+
     dr = flatten / 8 * (c1 - c2)
     distance = ra * (x + dr)
     return distance
+
+def get_yymm(path):
+    '''
+        Find the latest time of each typhoon [int(year), int(month)]
+    '''
+    history = data_process(path)
+
+    yymm_data = {}
+
+    for i in history: # for each typhoon, 'i' in essay
+        yymm = [] # list to gather lateset time of this typhoon
+
+        for j in history[i]['data']:
+            year, month = j[0:2], j[2:4]
+            if int(year) <= 50:
+                year = '20' + year
+            else:
+                year = '19' + year
+
+            yymm = [int(year), int(month)]
+
+        # add the list into yymm_data
+        yymm_data[i] = yymm
+    print("YYMM DATA SUCCESS!")
+    return yymm_data
