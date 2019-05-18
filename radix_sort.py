@@ -72,7 +72,7 @@ def weight_of_all(history, point_data, U):
     weight_of_all = [ [i, temp[i], yymm_data[i]] for i in temp ]
 
     print('WEIGHT OF ALL SUCCESS!')
-    print('WWWWW : ' + str(w))
+    print('TIME WEIGHT : ' + str(w))
     return weight_of_all
 
 def radix_sort(history, point_data, U):
