@@ -79,3 +79,26 @@ def get_yymm(history):
         yymm_data[i] = yymm
     print("YYMM DATA SUCCESS!")
     return yymm_data
+
+
+def compute_weight(k):
+    '''
+        Inverse func of: [ k + (k - 1) ] - SIGMA(i = 1, w + 2)[i] >= 1
+    '''
+    import math
+
+    w = (math.sqrt(16 * k - 15) - 5) / 2
+    w = int(w) #floor the float above(w)
+    return w if w > 0 else 1
+
+''' Test of Time Weight
+temp = compute_weight(1)
+for k in range(1, 1000):
+
+    if compute_weight(k) == temp:
+        print('w = ' + str(compute_weight(k)) + ', k =' + str(k))
+    else:
+        print()
+        print('w = ' + str(compute_weight(k)) + ', k =' + str(k))
+        temp = compute_weight(k)
+'''

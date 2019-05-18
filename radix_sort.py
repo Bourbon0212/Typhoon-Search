@@ -1,4 +1,4 @@
-from get_functions import history_point_data, getDistance, get_yymm
+from get_functions import history_point_data, getDistance, get_yymm, compute_weight
 
 def min_distance(history, point_data, U):
     '''
@@ -20,12 +20,12 @@ def min_distance(history, point_data, U):
     for i in point_data: # i refers to the ith historic typhoon
         distance_ijk = {}
 
-        for k in U:
+        for k in U['points']:
             min = 10 ** 10
             for j in point_data[i]:
                 # calulate the minimum distance (lat_ij, long_ij, lat_k, long_k)
-                if getDistance(j[0], j[1], U[k]['latitude'], U[k]['longitude']) < min:
-                    min = getDistance(j[0], j[1], U[k]['latitude'], U[k]['longitude'])
+                if getDistance(j[0], j[1], U['points'][k]['latitude'], U['points'][k]['longitude']) < min:
+                    min = getDistance(j[0], j[1], U['points'][k]['latitude'], U['points'][k]['longitude'])
 
             distance_ijk[k] = min
         min_distance[i] = distance_ijk
@@ -33,7 +33,7 @@ def min_distance(history, point_data, U):
     print('MIN DISTANCE SUCCESS!')
     return min_distance
 
-def weight_of_all(history, point_data, U, w):
+def weight_of_all(history, point_data, U):
     '''
         WEIGHT_OF_ALL
             Type : List
@@ -48,6 +48,8 @@ def weight_of_all(history, point_data, U, w):
     '''
     temp = {} # key: typhoon name; Value: sigma(1 + k * w)
     min_dist = min_distance(history, point_data, U)
+    num_predicted = len(U['points'].keys())
+    w = compute_weight(num_predicted) if U['parameter']['w'] == '' else U['parameter']['w']
 
     ### Part 1. Route Score
     for i in point_data:
@@ -55,8 +57,8 @@ def weight_of_all(history, point_data, U, w):
         count = 1 # kth
 
         # Whether the min distance(Dik) is less than radius
-        for k in U:
-            if min_dist[i][k] < U[k]['radius']:
+        for k in U['points']:
+            if min_dist[i][k] < U['points'][k]['radius']:
                 score[2] += 1
                 score[1] += count
             count += 1 # kth predicted
@@ -70,15 +72,15 @@ def weight_of_all(history, point_data, U, w):
     weight_of_all = [ [i, temp[i], yymm_data[i]] for i in temp ]
 
     print('WEIGHT OF ALL SUCCESS!')
+    print('WWWWW : ' + str(w))
     return weight_of_all
 
-def radix_sort(history, point_data, U, w = 1, n = 10):
+def radix_sort(history, point_data, U):
     '''
         RADIX_SORT
             Type : Dictionary
             Keys : Priority of the approximate historic typhoons
             Value: (dict) typhoon_international_id, name, points
-
             {
                 "1":{
                     "id": typhoon_international_id,
@@ -97,7 +99,7 @@ def radix_sort(history, point_data, U, w = 1, n = 10):
             }
     '''
     import datetime
-    weight = weight_of_all(history, point_data, U, w)
+    weight = weight_of_all(history, point_data, U)
 
     ### Part 1. Sort by the year (the closer, the more prior)
     for i in range(len(weight) - 1, 0, -1):
@@ -108,7 +110,9 @@ def radix_sort(history, point_data, U, w = 1, n = 10):
                 weight[j + 1] = ret
 
     ### Part 2. Sort by the month (the closer, the more prior)
-    month = datetime.datetime.now().month
+    month = U['parameter']['month']
+    month = datetime.datetime.now().month if month == '0' else int(month)
+
     for i in range(len(weight) - 1, 0, -1):
         for j in range(i):
             if abs(weight[j][2][1] - month) > abs(weight[j + 1][2][1] - month):
@@ -127,6 +131,7 @@ def radix_sort(history, point_data, U, w = 1, n = 10):
 
     ### Part 4. output
     final = {}
+    n = U['parameter']['n']
     for i in range(n):
         typhoon_id = weight[i][0]
         name = history[typhoon_id]['header']['name']
