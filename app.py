@@ -21,13 +21,19 @@ def route_sorting():
         print("USER INPUTS POST SUCCESS!")
         return user
     elif request.method == "GET":
-        print("USER INPUTS GET START")
-        history = data_process(url) # everything
-        point_data = history_point_data(history) # P(i, j)
-        U = json.loads(user) # convert user inputs to dict
-        return jsonify(radix_sort(history, point_data, U))
+        if user != {}:
+            print("RASIX SORT GET START!")
+            history = data_process(url) # everything
+            point_data = history_point_data(history) # P(i, j)
+            U = json.loads(user) # convert user inputs to dict
+            return jsonify(radix_sort(history, point_data, U))
+        else:
+            return ("NO USER INPUTS, RE-POST PLEASE!")
 
 @app.route("/user_inputs", methods = ["GET"])
 def user_inputs():
     global user
-    return user
+    if user != {}:
+        return user
+    else:
+        return ("NO USER INPUTS, RE-POST PLEASE!")
