@@ -1,9 +1,9 @@
-import os
-
-from flask import Flask, request, abort, jsonify, json, send_from_directory
+from flask import Flask, request, abort, jsonify, send_from_directory, json
 from data_process import data_process
 from get_functions import history_point_data
 from radix_sort import radix_sort
+
+import os
 
 app = Flask(__name__)
 path = 'bst_all.txt'
@@ -11,20 +11,15 @@ url = "https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/Besttracks/bs
 #U = {'points':{'point1':{'longitude': 130.3, 'latitude':21.3, 'radius': 50000}, 'point2':{'longitude': 127.9, 'latitude':21.8, 'radius': 50000}, 'point3':{'longitude': 126.0, 'latitude':22.4, 'radius': 100000}, 'point4':{'longitude': 123.2, 'latitude':23.5, 'radius': 150000}, 'point5':{'longitude': 110.2, 'latitude':23.5, 'radius': 150000}, 'point6':{'longitude': 100.2, 'latitude':23.5, 'radius': 150000}}, 'parameter':{'w':'', 'n':10, 'month':0}}
 user = {}
 
-@app.route('/front/<path:name>')
-# Front end, typhoon route visualization
+@app.route('/')
+#視覺化網站，不需要打index.html
+def index():
+    return send_from_directory('front', 'index.html')
+
+@app.route('/<path:name>')
 def reportroute(name):
     name = 'index.html' if name is "" else name
-    path = os.path.join("front", name)
-    with open(path, encoding='utf-8') as f:
-        content = f.read()
-    return content
-
-def send_js(name):
-    return send_from_directory('/front/js', name)
-
-def send_css(name):
-    return send_from_directory('/front/css', name)
+    return send_from_directory('front', name)
 
 @app.route("/route_sorting", methods = ["GET", "POST"])
 def route_sorting():
