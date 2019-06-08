@@ -132,9 +132,14 @@ def radix_sort(history, point_data, U):
     ### Part 4. output
     final = {}
     n = U['parameter']['n']
+
+    print() # For better layout of Showing total scores
     for i in range(n):
         typhoon_id = weight[i][0]
         name = history[typhoon_id]['header']['name']
+        print("NAME: " + name, end = ", ")
+        print("ID: " + typhoon_id, end = ", ")
+        print(weight[i][1])  ### Show the total score at local cmd
 
         json_point_data = []
         for j in point_data[typhoon_id]:
@@ -145,5 +150,6 @@ def radix_sort(history, point_data, U):
 
         final[i + 1] = {"name": name, "id": typhoon_id, "points": json_point_data}
 
+    print() # For better layout of Showing total scores
     print('RADIX SORT SUCCESS!')
     return final
