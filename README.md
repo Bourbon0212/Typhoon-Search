@@ -11,8 +11,7 @@
 ## 程式碼    
 ### app.py    
 * `@app.route('/')`: 使用者介面首頁   
-* `@app.route("/route_sorting")`: 歷史颱風路徑相似度分析排序結果   
-* `@app.route("/user_inputs")`: 使用者輸入欲搜尋之颱風路徑點    
+* `@app.route("/route_sorting")`: 歷史颱風路徑相似度分析排序結果     
 * `@app.route("/typhoon_history")`: 及時擷取 JMA 歷史颱風路徑資料   
 
 ### data_process.py   
