@@ -46,7 +46,12 @@ def getDistance(latA, lonA, latB, lonB):
 
     pA = math.atan(rb / ra * math.tan(radLatA))
     pB = math.atan(rb / ra * math.tan(radLatB))
-    x = math.acos(math.sin(pA) * math.sin(pB) + math.cos(pA) * math.cos(pB) * math.cos(radLonA - radLonB))
+
+    input = math.sin(pA) * math.sin(pB) + math.cos(pA) * math.cos(pB) * math.cos(radLonA - radLonB)
+    input = -1 if input < -1 else input
+    input = 1 if input > 1 else input
+    x = math.acos(input)
+
     c1 = (math.sin(x) - x) * (math.sin(pA) + math.sin(pB))**2 / math.cos(x / 2)**2
     try:
         c2 = (math.sin(x) + x) * (math.sin(pA) - math.sin(pB))**2 / math.sin(x / 2)**2
@@ -85,7 +90,7 @@ def compute_weight(k):
         Find the argmax(w) of the corresponding k predicted points
 
         Theory:
-        
+
             (i) When hasConflict --> a + bw versus c + dw, and a < c, b > d, where
                  |￣                x                                 x+w      ￣|
                  |　  a = x,  b = SIGMA(k - i),  c = x + omega,  d = SIGMA i  　 |

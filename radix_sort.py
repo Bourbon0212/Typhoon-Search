@@ -1,4 +1,5 @@
 from get_functions import history_point_data, getDistance, get_yymm, compute_weight
+from center.meta import URL_MAP
 
 def min_distance(history, point_data, U):
     '''
@@ -136,10 +137,19 @@ def radix_sort(history, point_data, U):
     print() # For better layout of Showing total scores
     for i in range(n):
         typhoon_id = weight[i][0]
-        name = history[typhoon_id]['header']['name']
-        print("NAME: " + name, end = ", ")
+
+        ## name (zh first)
+        en = history[typhoon_id]['header']['name']
+        zh = URL_MAP[typhoon_id]['zh'] if typhoon_id in URL_MAP else en
+
+        year = URL_MAP[typhoon_id]['year'] if typhoon_id in URL_MAP else 'N/A'
+        link = URL_MAP[typhoon_id]['links']['cwb'] if typhoon_id in URL_MAP and URL_MAP[typhoon_id]['links'] != {} else 'N/A'
+
+        print(weight[i][1], end = ", ")  ### Show the total score at local cmd
+        print("NAME: " + zh, end = ", ")
         print("ID: " + typhoon_id, end = ", ")
-        print(weight[i][1])  ### Show the total score at local cmd
+        print("Year: " + str(year), end = ", ")
+        print("link: " + link)
 
         json_point_data = []
         for j in point_data[typhoon_id]:
@@ -148,7 +158,7 @@ def radix_sort(history, point_data, U):
             temp = {"latitude": lat, "longitude": lon}
             json_point_data.append(temp)
 
-        final[i + 1] = {"name": name, "id": typhoon_id, "points": json_point_data}
+        final[i + 1] = { "id": typhoon_id, "name": zh, "year": year, "points": json_point_data, "links": link }
 
     print() # For better layout of Showing total scores
     print('RADIX SORT SUCCESS!')
