@@ -1,4 +1,9 @@
 # Typhoon-Search: 西北太平洋颱風路徑比對
+## Publications
+### [Historical Typhoon Search Engine Based on Track Similarity](https://www.mdpi.com/1660-4601/16/24/4879)    
+*Meng-Han Tsai, Hao-Yung Chan, Chun-Mo Hsieh, Cheng-Yu Ho, Hung-Kai Kung, Yun-Cheng Tsai and I-Cheng Cho
+Int. J. Environ. Res. Public Health 2019, 16(24), 4879*
+
 ## 分析方法
 本研究颱風路徑比對之演算法主要基於「**最短距離**」、「**時間加權**」與「**基數排序（radix sort）**」。首先，(1) 使用者從各國氣象單位匯入颱風點資料，或由 (2) 使用者輸入欲搜尋的颱風路徑點與其相對應的搜尋半徑，若歷史颱風路徑點與使用者輸入點之間的最短距離小於搜尋半徑，則賦予時間加權。其次，針對每一筆歷史颱風路徑，總合計算加權總分。最後，依總分、時間加權、通過點個數與時間進行基數排序，統整出路徑相似程度較高的歷史颱風資料。
 
